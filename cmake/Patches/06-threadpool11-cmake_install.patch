@@ -1,0 +1,17 @@
+diff --git a/threadpool11/CMakeLists.txt b/threadpool11/CMakeLists.txt
+index ca7c9c8..1b9eceb 100644
+--- a/threadpool11/CMakeLists.txt
++++ b/threadpool11/CMakeLists.txt
+@@ -8,10 +8,10 @@ if (CMAKE_COMPILER_IS_GNUCXX)
+     target_link_libraries(threadpool11 pthread)
+ endif()
+ 
+-if (UNIX)
++#if (UNIX)
+     install(FILES include/threadpool11/threadpool11.hpp DESTINATION include/threadpool11)
+     install(FILES include/threadpool11/worker.hpp DESTINATION include/threadpool11)
+     install(FILES include/threadpool11/pool.hpp DESTINATION include/threadpool11)
+     install(FILES include/threadpool11/utility.hpp DESTINATION include/threadpool11)
+     install(TARGETS threadpool11 DESTINATION lib)
+-endif()
++#endif()
