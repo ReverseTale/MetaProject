@@ -62,7 +62,7 @@ if (NOT ${USE_SYSTEM_MONGOCXX})
     ExternalProject_Add(
         EP_mongo-cxx-driver
         GIT_REPOSITORY https://github.com/mongodb/mongo-cxx-driver.git
-        #GIT_TAG r1.3
+        GIT_TAG r3.0.1
         LOG_DOWNLOAD ON
         LOG_CONFIGURE ON
         LOG_BUILD ON

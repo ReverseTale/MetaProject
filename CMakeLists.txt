@@ -8,6 +8,9 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install" CACHE PATH "Default install path" FORCE)
 endif()
 
+# ---[ Includes
+include(cmake-common/Utils.cmake)
+
 # -- [ Options
 option(ReverseTale_BUILD_HEADLESS           "Build headless bot"        ON)
 option(ReverseTale_BUILD_BOT                "Build bot"                 ON)
@@ -38,3 +41,6 @@ set(ReverseTale_BUILD_XHACKING ${BUILD_BOT})
 
 # ---[ Dependencies external projects
 add_subdirectory(dep)
+
+# ---[ ReversTale projects
+add_subdirectory(src)
