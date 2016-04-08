@@ -3,13 +3,22 @@ include(ExternalProject)
 set(DEP_BASE ${CMAKE_BINARY_DIR}/dep)
 SET_PROPERTY(DIRECTORY PROPERTY EP_BASE ${DEP_BASE})
 
-set(BSON_DIR ${DEP_BASE}/Install/EP_libbson)
-set(MONGOC_DIR ${DEP_BASE}/Install/EP_mongo-c-driver)
-set(MONGOCXX_DIR ${DEP_BASE}/Install/EP_mongo-cxx-driver)
-set(CPPFORMAT_DIR ${DEP_BASE}/Install/EP_cppformat)
-set(INIH_DIR ${DEP_BASE}/Install/EP_inih)
-set(THREADPOOL11_DIR ${DEP_BASE}/Install/EP_threadpool11)
-set(XHACKING_DIR ${DEP_BASE}/Install/EP_xHacking)
+if (${ReverseTale_DEV} AND "${ReverseTale_INSTALL_BASE}" STREQUAL "")
+    set(ReverseTale_INSTALL_BASE "" CACHE PATH "Dependencies Install directory")
+    message(FATAL_ERROR "ReverseTale_INSTALL_BASE Should be set")
+elseif (${ReverseTale_DEV} AND ${ReverseTale_INSTALL_BASE} MATCHES ${PROJECT_SOURCE_DIR})
+    message(FATAL_ERROR "ReverseTale_INSTALL_BASE Should be set outside of ${PROJECT_SOURCE_DIR}")
+elseif (NOT ${ReverseTale_DEV} AND "${ReverseTale_INSTALL_BASE}" STREQUAL "")
+    set(ReverseTale_INSTALL_BASE    ${DEP_BASE})
+endif()
+
+set(LIBBSON_DIR         ${ReverseTale_INSTALL_BASE}/Dependencies/EP_libbson          CACHE INTERNAL "")
+set(LIBMONGOC_DIR       ${ReverseTale_INSTALL_BASE}/Dependencies/EP_mongo-c-driver   CACHE INTERNAL "")
+set(MONGOCXX_DIR        ${ReverseTale_INSTALL_BASE}/Dependencies/EP_mongo-cxx-driver)
+set(CPPFORMAT_DIR       ${ReverseTale_INSTALL_BASE}/Dependencies/EP_cppformat)
+set(INIH_DIR            ${ReverseTale_INSTALL_BASE}/Dependencies/EP_inih)
+set(THREADPOOL11_DIR    ${ReverseTale_INSTALL_BASE}/Dependencies/EP_threadpool11)
+set(XHACKING_DIR        ${ReverseTale_INSTALL_BASE}/Dependencies/EP_xHacking)
 
 if (NOT ${USE_SYSTEM_LIBBSON})
     ExternalProject_Add(
@@ -22,7 +31,7 @@ if (NOT ${USE_SYSTEM_LIBBSON})
         LOG_INSTALL ON
         LOG_UPDATE ON
         UPDATE_COMMAND ""
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX:PATH=${BSON_DIR} -DINCLUDE_INSTALL_DIR=.
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX:PATH=${LIBBSON_DIR} -DINCLUDE_INSTALL_DIR=.
     )
 
     ExternalProject_Add_Step(
@@ -33,7 +42,7 @@ if (NOT ${USE_SYSTEM_LIBBSON})
         DEPENDEES download
     )
 
-    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${BSON_DIR}" CACHE INTERNAL "")
+    Add2Set("${CMAKE_PREFIX_PATH}" ${LIBBSON_DIR} CMAKE_PREFIX_PATH)
 else()
     add_custom_target(EP_libbson)
 endif()
@@ -49,11 +58,11 @@ if (NOT ${USE_SYSTEM_MONGOC})
         LOG_INSTALL ON
         LOG_UPDATE ON
         UPDATE_COMMAND ""
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBSON_ROOT_DIR=${BSON_DIR} -DBSON_INCLUDE_DIR=${BSON_DIR}/include -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX:PATH=${MONGOC_DIR} -DINCLUDE_INSTALL_DIR=.
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBSON_ROOT_DIR=${LIBBSON_DIR} -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX:PATH=${LIBMONGOC_DIR} -DINCLUDE_INSTALL_DIR=.
         DEPENDS EP_libbson
     )
 
-    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MONGOC_DIR}" CACHE INTERNAL "")
+    Add2Set("${CMAKE_PREFIX_PATH}" ${LIBMONGOC_DIR} CMAKE_PREFIX_PATH)
 else()
     add_custom_target(EP_mongo-c-driver)
 endif()
@@ -69,7 +78,7 @@ if (NOT ${USE_SYSTEM_MONGOCXX})
         LOG_INSTALL ON
         LOG_UPDATE ON
         UPDATE_COMMAND ""
-        CMAKE_ARGS -DBOOST_ROOT=${BOOST_ROOT} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DLIBBSON_DIR=${BSON_DIR} -DLIBMONGOC_DIR=${MONGOC_DIR} -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX:PATH=${MONGOCXX_DIR} -DINCLUDE_INSTALL_DIR=.
+        CMAKE_ARGS -DBOOST_ROOT=${BOOST_ROOT} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DLIBBSON_DIR=${LIBBSON_DIR} -DLIBMONGOC_DIR=${LIBMONGOC_DIR} -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX:PATH=${MONGOCXX_DIR} -DINCLUDE_INSTALL_DIR=.
         DEPENDS EP_mongo-c-driver
     )
 
@@ -81,7 +90,8 @@ if (NOT ${USE_SYSTEM_MONGOCXX})
         DEPENDEES download
     )
 
-    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MONGOCXX_DIR}" CACHE INTERNAL "")
+    Add2Set("${CMAKE_PREFIX_PATH}" ${MONGOCXX_DIR} CMAKE_PREFIX_PATH)
+    Add2Set("${CMAKE_MODULE_PATH}" "${DEP_BASE}/Source/EP_mongo-cxx-driver/cmake" CMAKE_MODULE_PATH)
 else()
     add_custom_target(EP_mongo-cxx-driver)
 endif()
@@ -97,7 +107,7 @@ ExternalProject_Add(
     UPDATE_COMMAND ""
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DFMT_DOC=OFF -DFMT_TEST=OFF -DCMAKE_INSTALL_PREFIX:PATH=${CPPFORMAT_DIR} -DINCLUDE_INSTALL_DIR=.
 )
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${CPPFORMAT_DIR}" CACHE INTERNAL "")
+Add2Set("${CMAKE_PREFIX_PATH}" ${CPPFORMAT_DIR} CMAKE_PREFIX_PATH)
 
 
 ExternalProject_Add(
@@ -120,7 +130,7 @@ ExternalProject_Add_Step(
          && git apply --whitespace=fix ${CMAKE_SOURCE_DIR}/cmake/Patches/02-inih-has_key.patch
     DEPENDEES download
 )
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${INIH_DIR}" CACHE INTERNAL "")
+Add2Set("${CMAKE_PREFIX_PATH}" ${INIH_DIR} CMAKE_PREFIX_PATH)
 
 
 ExternalProject_Add(
@@ -135,7 +145,6 @@ ExternalProject_Add(
     UPDATE_COMMAND ""
     CMAKE_ARGS -DBOOST_ROOT=${BOOST_ROOT} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX:PATH=${THREADPOOL11_DIR} -DINCLUDE_INSTALL_DIR=.
 )
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${THREADPOOL11_DIR}" CACHE INTERNAL "")
 
 ExternalProject_Add_Step(
     EP_threadpool11
@@ -144,7 +153,7 @@ ExternalProject_Add_Step(
     COMMAND git stash && git apply --whitespace=fix ${CMAKE_SOURCE_DIR}/cmake/Patches/06-threadpool11-cmake_install.patch
     DEPENDEES download
 )
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${INIH_DIR}" CACHE INTERNAL "")
+Add2Set("${CMAKE_PREFIX_PATH}" ${THREADPOOL11_DIR} CMAKE_PREFIX_PATH)
 
 
 if (${ReverseTale_BUILD_XHACKING})
@@ -158,5 +167,19 @@ if (${ReverseTale_BUILD_XHACKING})
         LOG_UPDATE ON
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX:PATH=${XHACKING_DIR} -DINCLUDE_INSTALL_DIR=.
     )
-    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${XHACKING_DIR}" CACHE INTERNAL "")
+    Add2Set("${CMAKE_PREFIX_PATH}" ${XHACKING_DIR} CMAKE_PREFIX_PATH)
+endif()
+
+if (${ReverseTale_DEV})
+    find_package(libmongocxx QUIET)
+
+    if (NOT libmongocxx_FOUND)
+        ExternalProject_Add_Step(
+            EP_mongo-cxx-driver
+            EP_mongo-cxx-driver-rerun-cmake
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} ${PROJECT_SOURCE_DIR}
+            DEPENDEES download
+        )
+    endif()
 endif()
