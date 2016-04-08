@@ -1,3 +1,6 @@
 [submodule "cmake-common"]
 	path = cmake-common
 	url = https://github.com/ReverseTale/cmake-common.git
+[submodule "src/Game-Server"]
+	path = src/Game-Server
+	url = https://github.com/ReverseTale/Game-Server.git

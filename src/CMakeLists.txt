@@ -68,6 +68,26 @@ if (NOT ${ReverseTale_DEV})
         	DEPENDS CommonServer
         )
     endif()
+
+    if (${ReverseTale_BUILD_GAMESERVER})
+        ExternalProject_Add(
+            LoginServer
+            GIT_REPOSITORY https://github.com/ReverseTale/Game-Server.git
+        	GIT_SUBMODULES cmake-common
+            SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Login-Server
+            LOG_DOWNLOAD ON
+            LOG_CONFIGURE ON
+            LOG_BUILD ON
+            LOG_INSTALL ON
+            LOG_UPDATE ON
+            CMAKE_ARGS
+                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH_STRING}
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH_STRING}
+                -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_SOURCE_DIR} -DINCLUDE_INSTALL_DIR=.
+        	DEPENDS CommonServer
+        )
+    endif()
 else()
 
     find_package(libmongocxx QUIET)
@@ -80,29 +100,76 @@ else()
             	OUTPUT_QUIET
             	ERROR_QUIET
             )
-        endif()
 
-        if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Common-Server/CMakeLists.txt)
             execute_process(
-            	COMMAND git submodule add https://github.com/ReverseTale/Common-Server.git
-            	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
-            	OUTPUT_QUIET
-            	ERROR_QUIET
-            )
-        endif()
-
-        if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Login-Server/CMakeLists.txt)
-            execute_process(
-            	COMMAND git submodule add https://github.com/ReverseTale/Login-Server.git
-            	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
-            	OUTPUT_QUIET
-            	ERROR_QUIET
+                COMMAND git submodule update --init --recursive
+                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Library
+                OUTPUT_QUIET
+                ERROR_QUIET
             )
         endif()
 
         add_subdirectory(Library)
-        add_subdirectory(Common-Server)
-        add_subdirectory(Login-Server)
+
+        if (${ReverseTale_BUILD_LOGINSERVER} OR ${ReverseTale_BUILD_GAMESERVER})
+            if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Common-Server/CMakeLists.txt)
+                execute_process(
+                	COMMAND git submodule add https://github.com/ReverseTale/Common-Server.git
+                	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
+                	OUTPUT_QUIET
+                	ERROR_QUIET
+                )
+
+                execute_process(
+                    COMMAND git submodule update --init --recursive
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Common-Server
+                    OUTPUT_QUIET
+                    ERROR_QUIET
+                )
+            endif()
+
+            add_subdirectory(Common-Server)
+        endif()
+
+        if (${ReverseTale_BUILD_LOGINSERVER})
+            if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Login-Server/CMakeLists.txt)
+                execute_process(
+                	COMMAND git submodule add https://github.com/ReverseTale/Login-Server.git
+                	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
+                	OUTPUT_QUIET
+                	ERROR_QUIET
+                )
+
+                execute_process(
+                    COMMAND git submodule update --init --recursive
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Login-Server
+                    OUTPUT_QUIET
+                    ERROR_QUIET
+                )
+            endif()
+
+            add_subdirectory(Login-Server)
+        endif()
+
+        if (${ReverseTale_BUILD_GAMESERVER})
+            if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Game-Server/CMakeLists.txt)
+                execute_process(
+                	COMMAND git submodule add https://github.com/ReverseTale/Game-Server.git
+                	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
+                	OUTPUT_QUIET
+                	ERROR_QUIET
+                )
+
+                execute_process(
+                    COMMAND git submodule update --init --recursive
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Game-Server
+                    OUTPUT_QUIET
+                    ERROR_QUIET
+                )
+            endif()
+
+            add_subdirectory(Game-Server)
+        endif()
 
     endif()
 
