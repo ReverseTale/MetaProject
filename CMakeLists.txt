@@ -38,7 +38,7 @@ else()
 endif()
 
 # -- [ Only add xHacking if building the bot
-set(ReverseTale_BUILD_XHACKING ${BUILD_BOT})
+set(ReverseTale_BUILD_XHACKING ${ReverseTale_BUILD_BOT})
 
 # ---[ Dependencies external projects
 add_subdirectory(dep)

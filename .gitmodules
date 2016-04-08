@@ -4,3 +4,6 @@
 [submodule "src/Game-Server"]
 	path = src/Game-Server
 	url = https://github.com/ReverseTale/Game-Server.git
+[submodule "src/Bot"]
+	path = src/Bot
+	url = https://github.com/ReverseTale/Bot.git

@@ -71,10 +71,30 @@ if (NOT ${ReverseTale_DEV})
 
     if (${ReverseTale_BUILD_GAMESERVER})
         ExternalProject_Add(
-            LoginServer
+            GameServer
             GIT_REPOSITORY https://github.com/ReverseTale/Game-Server.git
         	GIT_SUBMODULES cmake-common
-            SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Login-Server
+            SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Game-Server
+            LOG_DOWNLOAD ON
+            LOG_CONFIGURE ON
+            LOG_BUILD ON
+            LOG_INSTALL ON
+            LOG_UPDATE ON
+            CMAKE_ARGS
+                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH_STRING}
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH_STRING}
+                -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_SOURCE_DIR} -DINCLUDE_INSTALL_DIR=.
+        	DEPENDS CommonServer
+        )
+    endif()
+
+    if (${ReverseTale_BUILD_BOT})
+        ExternalProject_Add(
+            Bot
+            GIT_REPOSITORY https://github.com/ReverseTale/Bot.git
+        	GIT_SUBMODULES cmake-common
+            SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Bot
             LOG_DOWNLOAD ON
             LOG_CONFIGURE ON
             LOG_BUILD ON
@@ -169,6 +189,26 @@ else()
             endif()
 
             add_subdirectory(Game-Server)
+        endif()
+
+        if (${ReverseTale_BUILD_BOT})
+            if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Bot/CMakeLists.txt)
+                execute_process(
+                	COMMAND git submodule add https://github.com/ReverseTale/Bot.git
+                	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
+                	OUTPUT_QUIET
+                	ERROR_QUIET
+                )
+
+                execute_process(
+                    COMMAND git submodule update --init --recursive
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Bot
+                    OUTPUT_QUIET
+                    ERROR_QUIET
+                )
+            endif()
+
+            add_subdirectory(Bot)
         endif()
 
     endif()
