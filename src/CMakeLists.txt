@@ -13,6 +13,7 @@ if (NOT ${ReverseTale_DEV})
         GIT_REPOSITORY https://github.com/ReverseTale/Library.git
     	GIT_SUBMODULES cmake-common
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Library
+        INSTALL_DIR ${PROJECT_SOURCE_DIR}
         LOG_DOWNLOAD ON
         LOG_CONFIGURE ON
         LOG_BUILD ON
@@ -32,6 +33,7 @@ if (NOT ${ReverseTale_DEV})
             GIT_REPOSITORY https://github.com/ReverseTale/Common-Server.git
         	GIT_SUBMODULES cmake-common
             SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Common-Server
+            INSTALL_DIR ${PROJECT_SOURCE_DIR}
             LOG_DOWNLOAD ON
             LOG_CONFIGURE ON
             LOG_BUILD ON
@@ -55,6 +57,7 @@ if (NOT ${ReverseTale_DEV})
             GIT_REPOSITORY https://github.com/ReverseTale/Login-Server.git
         	GIT_SUBMODULES cmake-common
             SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Login-Server
+            INSTALL_DIR ${PROJECT_SOURCE_DIR}
             LOG_DOWNLOAD ON
             LOG_CONFIGURE ON
             LOG_BUILD ON
@@ -75,6 +78,7 @@ if (NOT ${ReverseTale_DEV})
             GIT_REPOSITORY https://github.com/ReverseTale/Game-Server.git
         	GIT_SUBMODULES cmake-common
             SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Game-Server
+            INSTALL_DIR ${PROJECT_SOURCE_DIR}
             LOG_DOWNLOAD ON
             LOG_CONFIGURE ON
             LOG_BUILD ON
@@ -95,6 +99,7 @@ if (NOT ${ReverseTale_DEV})
             GIT_REPOSITORY https://github.com/ReverseTale/Bot.git
         	GIT_SUBMODULES cmake-common
             SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Bot
+            INSTALL_DIR ${PROJECT_SOURCE_DIR}
             LOG_DOWNLOAD ON
             LOG_CONFIGURE ON
             LOG_BUILD ON

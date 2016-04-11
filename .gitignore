@@ -1,6 +1,6 @@
 [Bb]uild/
 [Bb]in/
 [Ll]ib/
-
+include/
 src/
 !src/CMakeLists.txt
