@@ -120,17 +120,10 @@ else()
     if (libmongocxx_FOUND)
         if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Library/CMakeLists.txt)
             execute_process(
-            	COMMAND git submodule add https://github.com/ReverseTale/Library.git
+            	COMMAND git clone https://github.com/ReverseTale/Library.git --recursive
             	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
             	OUTPUT_QUIET
             	ERROR_QUIET
-            )
-
-            execute_process(
-                COMMAND git submodule update --init --recursive
-                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Library
-                OUTPUT_QUIET
-                ERROR_QUIET
             )
         endif()
 
@@ -139,17 +132,10 @@ else()
         if (${ReverseTale_BUILD_LOGINSERVER} OR ${ReverseTale_BUILD_GAMESERVER})
             if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Common-Server/CMakeLists.txt)
                 execute_process(
-                	COMMAND git submodule add https://github.com/ReverseTale/Common-Server.git
+                	COMMAND git clone https://github.com/ReverseTale/Common-Server.git --recursive
                 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
                 	OUTPUT_QUIET
                 	ERROR_QUIET
-                )
-
-                execute_process(
-                    COMMAND git submodule update --init --recursive
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Common-Server
-                    OUTPUT_QUIET
-                    ERROR_QUIET
                 )
             endif()
 
@@ -159,17 +145,10 @@ else()
         if (${ReverseTale_BUILD_LOGINSERVER})
             if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Login-Server/CMakeLists.txt)
                 execute_process(
-                	COMMAND git submodule add https://github.com/ReverseTale/Login-Server.git
+                	COMMAND git clone https://github.com/ReverseTale/Login-Server.git --recursive
                 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
                 	OUTPUT_QUIET
                 	ERROR_QUIET
-                )
-
-                execute_process(
-                    COMMAND git submodule update --init --recursive
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Login-Server
-                    OUTPUT_QUIET
-                    ERROR_QUIET
                 )
             endif()
 
@@ -179,17 +158,10 @@ else()
         if (${ReverseTale_BUILD_GAMESERVER})
             if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Game-Server/CMakeLists.txt)
                 execute_process(
-                	COMMAND git submodule add https://github.com/ReverseTale/Game-Server.git
+                	COMMAND git clone https://github.com/ReverseTale/Game-Server.git --recursive
                 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
                 	OUTPUT_QUIET
                 	ERROR_QUIET
-                )
-
-                execute_process(
-                    COMMAND git submodule update --init --recursive
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Game-Server
-                    OUTPUT_QUIET
-                    ERROR_QUIET
                 )
             endif()
 
@@ -199,17 +171,10 @@ else()
         if (${ReverseTale_BUILD_BOT})
             if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Bot/CMakeLists.txt)
                 execute_process(
-                	COMMAND git submodule add https://github.com/ReverseTale/Bot.git
+                	COMMAND git clone https://github.com/ReverseTale/Bot.git --recursive
                 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
                 	OUTPUT_QUIET
                 	ERROR_QUIET
-                )
-
-                execute_process(
-                    COMMAND git submodule update --init --recursive
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/Bot
-                    OUTPUT_QUIET
-                    ERROR_QUIET
                 )
             endif()
 
