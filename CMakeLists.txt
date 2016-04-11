@@ -12,7 +12,7 @@ endif()
 include(cmake-common/Utils.cmake)
 
 # -- [ Options
-option(ReverseTale_DEV                      "Development CMake mode"    ON)
+option(ReverseTale_DEV                      "Development CMake mode"    OFF)
 option(ReverseTale_BUILD_HEADLESS           "Build headless bot"        ON)
 option(ReverseTale_BUILD_BOT                "Build bot"                 ON)
 option(ReverseTale_BUILD_LOGINSERVER        "Build Login Server"        ON)
