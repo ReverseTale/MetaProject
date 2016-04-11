@@ -113,6 +113,27 @@ if (NOT ${ReverseTale_DEV})
         	DEPENDS CommonServer
         )
     endif()
+
+    if (${ReverseTale_BUILD_HEADLESS})
+        ExternalProject_Add(
+            Headless
+            GIT_REPOSITORY https://github.com/ReverseTale/Headless.git
+        	GIT_SUBMODULES cmake-common
+            SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Headless
+            INSTALL_DIR ${PROJECT_SOURCE_DIR}
+            LOG_DOWNLOAD ON
+            LOG_CONFIGURE ON
+            LOG_BUILD ON
+            LOG_INSTALL ON
+            LOG_UPDATE ON
+            CMAKE_ARGS
+                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH_STRING}
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH_STRING}
+                -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_SOURCE_DIR} -DINCLUDE_INSTALL_DIR=.
+        	DEPENDS CommonServer
+        )
+    endif()
 else()
 
     find_package(libmongocxx QUIET)
@@ -179,6 +200,19 @@ else()
             endif()
 
             add_subdirectory(Bot)
+        endif()
+
+        if (${ReverseTale_BUILD_HEADLESS})
+            if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/Headless/CMakeLists.txt)
+                execute_process(
+                	COMMAND git clone https://github.com/ReverseTale/Headless.git --recursive
+                	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
+                	OUTPUT_QUIET
+                	ERROR_QUIET
+                )
+            endif()
+
+            add_subdirectory(Headless)
         endif()
 
     endif()
