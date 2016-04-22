@@ -14,6 +14,7 @@ This project uses CMake as a project/make generator, all you need to do is:
 `cd MetaProject && mkdir Build`
 
 * Install Boost:
+
 > * Ubuntu users may do: `apt-get install libboost-all-dev`
 > * Windows users may download 1.60 prebuilt binaries from: https://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/
 
@@ -31,6 +32,7 @@ Binaries Only Build
 `cd Build && cmake ..`
 
 2. Using the GUI (windows only), set: 
+
 > * Where is the source code: Path to `MetaProject`
 > * Where to build the binaries: Path to `MetaProject/Build`
 > * Press `[Configure]`
@@ -42,11 +44,13 @@ Source Code Build
 ------------------
 
 1. Using the console:
+
 > * To build the source code version run:
 
 `cd Build && cmake -DReverseTale_DEV=ON -DReverseTale_INSTALL_BASE=/some_path/outside/MetaProject ..`
 
 2. Using the GUI (windows only), set: 
+
 > * Where is the source code: Path to `MetaProject`
 > * Where to build the binaries: Path to `MetaProject/Build`
 > * Press `[Configure]`
