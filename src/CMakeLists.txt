@@ -47,7 +47,7 @@ if (NOT ${ReverseTale_DEV})
                 -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                 -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH_STRING}
                 -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_SOURCE_DIR} -DINCLUDE_INSTALL_DIR=.
-        	DEPENDS EP_mongo-cxx-driver EP_threadpool11 EP_inih
+        	DEPENDS EP_mongo-cxx-driver EP_threadpool11 EP_inih Library
         )
     endif()
 
