@@ -104,7 +104,7 @@ endif()
 ExternalProject_Add(
     EP_cppformat
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_COMMIT b64d13a357d3556e54ed92a959baf3a14e2f6078
+    GIT_TAG b64d13a357d3556e54ed92a959baf3a14e2f6078
     INSTALL_DIR ${CPPFORMAT_DIR}
     LOG_DOWNLOAD ON
     LOG_CONFIGURE ON
@@ -120,7 +120,7 @@ Add2Set("${CMAKE_PREFIX_PATH}" ${CPPFORMAT_DIR} CMAKE_PREFIX_PATH)
 ExternalProject_Add(
     EP_inih
     GIT_REPOSITORY https://github.com/benhoyt/inih.git
-    GIT_COMMIT 0c3f8ea80ca2c8be8995a0b7b4e84af1641a4dd2
+    GIT_TAG 0c3f8ea80ca2c8be8995a0b7b4e84af1641a4dd2
     INSTALL_DIR ${INIH_DIR}
     LOG_DOWNLOAD ON
     LOG_CONFIGURE ON
