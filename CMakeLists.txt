@@ -9,7 +9,13 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # ---[ Includes
-include(cmake-common/Utils.cmake)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-utils)
+
+# -[ Macros and functions
+include(Configure)
+include(Macros)
+include(External)
+ResetAllTargets()
 
 # -- [ Options
 option(ReverseTale_DEV                      "Development CMake mode"    OFF)
@@ -23,18 +29,52 @@ option(ReverseTale_DEBUG                    "Debug library and tools"   ON)
 option(USE_SYSTEM_LIBBSON                   "Use system LibBSON"        OFF)
 option(USE_SYSTEM_MONGOC                    "Use system MongoC"         OFF)
 option(USE_SYSTEM_MONGOCXX                  "Use system MongoCXX"       OFF)
-option(USE_SYSTEM_BOOST                     "Use system Boost"          ON)
+option(USE_SYSTEM_BOOST                     "Use system Boost"          OFF)
+
+# --[ Build process
+CreateTarget(TARGET MetaProject)
 
 # -- [ If using system Boost, assert it is there
 if (${USE_SYSTEM_BOOST})
-    find_package(Boost QUIET)
-    if (NOT ${Boost_FOUND})
-        set(BOOST_ROOT ${Boost_FOUND} CACHE PATH "System boost path")
-        mark_as_advanced(Boost_DIR)
-        message(FATAL_ERROR "Please set BOOST_ROOT to point your Boost installation")
-    endif()
+    # find_package(Boost 1.62 REQUIRED)
+    # set(BOOST_DEPENDENCIES "")
+
+    # AddDependency(
+    #     TARGET MetaProject
+    #     DEPENDENCY Boost
+    # )
 else()
-    message(FATAL_ERROR "Building Boost is still not supported")
+    # Add all deps
+    set(BOOST_DEPENDENCIES
+        # Lockfree dependencies
+        lockfree core config assert static_assert type_traits mpl preprocessor
+        array throw_exception functional align parameter atomic detail
+        utility predef winapi 
+
+        # Asio dependencies
+        asio system date_time smart_ptr bind regex
+
+        # Pool dependencies
+        pool integer
+
+        # Graph
+        graph unordered move iterator tuple property_map concept_check
+        multi_index foreach serialization optional range typeof conversion
+        tti function_types numeric_conversion container_hash
+
+        # Bimap
+        bimap
+    )
+
+    foreach (dep ${BOOST_DEPENDENCIES})
+        RequireExternal(
+            TARGET MetaProject
+            EXCLUDE
+            SKIP_BUILD
+            MODULE "boostorg/${dep}:develop"
+            INC_PATH "include"
+        )
+    endforeach()
 endif()
 
 # -- [ Only add xHacking if building the bot
@@ -44,4 +84,4 @@ set(ReverseTale_BUILD_XHACKING ${ReverseTale_BUILD_BOT})
 add_subdirectory(dep)
 
 # ---[ ReversTale projects
-add_subdirectory(src)
+# add_subdirectory(src)
