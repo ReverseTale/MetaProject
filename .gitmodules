@@ -1,3 +1,3 @@
-[submodule "cmake-common"]
-	path = cmake-common
-	url = https://github.com/ReverseTale/cmake-common.git
+[submodule "cmake-utils"]
+	path = cmake-utils
+	url = https://github.com/gpascualg/cmake-utils
