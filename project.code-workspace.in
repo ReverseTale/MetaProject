@@ -1,0 +1,17 @@
+{
+    "folders": [
+            {
+                    "path": "@LIBRARY_PATH@"
+            },
+            {
+                    "path": "@COMMON_SERVER_PATH@"
+            },
+            {
+                    "path": "@LOGIN_SERVER_PATH@"
+            },
+            {
+                    "path": "@GAME_SERVER_PATH@"
+            }
+    ],
+    "settings": {}
+}

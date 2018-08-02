@@ -1,0 +1,17 @@
+{
+    "folders": [
+            {
+                    "path": "/home/guillem/Github/ReverseTale/MetaProject/project/Library"
+            },
+            {
+                    "path": "/home/guillem/Github/ReverseTale/MetaProject/project/Common-Server"
+            },
+            {
+                    "path": "/home/guillem/Github/ReverseTale/MetaProject/project/Login-Server"
+            },
+            {
+                    "path": "/home/guillem/Github/ReverseTale/MetaProject/project/Game-Server"
+            }
+    ],
+    "settings": {}
+}

@@ -2,5 +2,9 @@
 [Bb]in/
 [Ll]ib/
 include/
-src/
-!src/CMakeLists.txt
+
+project/
+!project/.gitkeep
+
+install/
+!install/.gitkeep

@@ -3,10 +3,9 @@ cmake_minimum_required(VERSION 2.8.0)
 # ---[ Latte project
 project(MetaProject C CXX)
 
-# ---[ Install path
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set (CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install" CACHE PATH "Default install path" FORCE)
-endif()
+# Force prefix and third party
+set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/install CACHE INTERNAL "")
+set(OVERRIDE_THIRD_PARTY ${CMAKE_SOURCE_DIR}/install CACHE INTERNAL "")
 
 # ---[ Includes
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-utils)
@@ -18,70 +17,21 @@ include(External)
 ResetAllTargets()
 
 # -- [ Options
-option(ReverseTale_DEV                      "Development CMake mode"    OFF)
-option(ReverseTale_BUILD_HEADLESS           "Build headless bot"        ON)
-option(ReverseTale_BUILD_BOT                "Build bot"                 ON)
+option(ReverseTale_BUILD_HEADLESS           "Build headless bot"        OFF)
+option(ReverseTale_BUILD_BOT                "Build bot"                 OFF)
 option(ReverseTale_BUILD_LOGINSERVER        "Build Login Server"        ON)
 option(ReverseTale_BUILD_GAMESERVER         "Build Game Server"         ON)
 option(ReverseTale_DEBUG                    "Debug library and tools"   ON)
 
-# -- [ System libs options
-option(USE_SYSTEM_LIBBSON                   "Use system LibBSON"        OFF)
-option(USE_SYSTEM_MONGOC                    "Use system MongoC"         OFF)
-option(USE_SYSTEM_MONGOCXX                  "Use system MongoCXX"       OFF)
-option(USE_SYSTEM_BOOST                     "Use system Boost"          OFF)
+if (ReverseTale_BUILD_BOT OR ReverseTale_BUILD_HEADLESS)
+    message(FATAL_ERROR "Building bot (or headless bot) is disabled")
+endif()
 
 # --[ Build process
 CreateTarget(TARGET MetaProject)
 
-# -- [ If using system Boost, assert it is there
-if (${USE_SYSTEM_BOOST})
-    # find_package(Boost 1.62 REQUIRED)
-    # set(BOOST_DEPENDENCIES "")
-
-    # AddDependency(
-    #     TARGET MetaProject
-    #     DEPENDENCY Boost
-    # )
-else()
-    # Add all deps
-    set(BOOST_DEPENDENCIES
-        # Lockfree dependencies
-        lockfree core config assert static_assert type_traits mpl preprocessor
-        array throw_exception functional align parameter atomic detail
-        utility predef winapi 
-
-        # Asio dependencies
-        asio system date_time smart_ptr bind regex
-
-        # Pool dependencies
-        pool integer
-
-        # Graph
-        graph unordered move iterator tuple property_map concept_check
-        multi_index foreach serialization optional range typeof conversion
-        tti function_types numeric_conversion container_hash
-
-        # Bimap
-        bimap
-    )
-
-    foreach (dep ${BOOST_DEPENDENCIES})
-        RequireExternal(
-            TARGET MetaProject
-            EXCLUDE
-            SKIP_BUILD
-            MODULE "boostorg/${dep}:develop"
-            INC_PATH "include"
-        )
-    endforeach()
-endif()
-
 # -- [ Only add xHacking if building the bot
 set(ReverseTale_BUILD_XHACKING ${ReverseTale_BUILD_BOT})
 
-# ---[ Dependencies external projects
-add_subdirectory(dep)
-
 # ---[ ReversTale projects
-# add_subdirectory(src)
+add_subdirectory(dep)
