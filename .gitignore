@@ -3,8 +3,8 @@
 [Ll]ib/
 include/
 
-project/
+project/*
 !project/.gitkeep
 
-install/
+install/*
 !install/.gitkeep
