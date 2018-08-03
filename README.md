@@ -27,7 +27,7 @@ cd MetaProject && mkdir build
 Now configure and compile with:
 
 ```
-cmake ..
+cmake -G Ninja ..
 ninja
 ``` 
 
