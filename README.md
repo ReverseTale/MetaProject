@@ -18,15 +18,16 @@ Clone (recursively) the project
 git clone --recursive https://github.com/ReverseTale/MetaProject.git
 ```
  
-Create a folder inside MetaProject: `MetaProject/Build`
+Create a folder inside MetaProject: `MetaProject/build`
 
 ```
 cd MetaProject && mkdir build
 ```
 
-Now configure and compile with:
+Now, from inside `build`, configure and compile with:
 
 ```
+cd build
 cmake -G Ninja ..
 ninja
 ``` 
