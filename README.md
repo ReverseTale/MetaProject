@@ -18,16 +18,17 @@ Clone (recursively) the project
 git clone --recursive https://github.com/ReverseTale/MetaProject.git
 ```
  
-Create a folder inside MetaProject: `MetaProject/Build`
+Create a folder inside MetaProject: `MetaProject/build`
 
 ```
 cd MetaProject && mkdir build
 ```
 
-Now configure and compile with:
+Now, from inside `build`, configure and compile with:
 
 ```
-cmake ..
+cd build
+cmake -G Ninja ..
 ninja
 ``` 
 
@@ -59,6 +60,14 @@ MetaProject/install/bin/GameServer
 ```
 
 The recommended way to work is by using `Visual Studio Code`, either on Windows or Linux. To do so, **once the project is already built** (otherwise you will not see it) open the file `project.code-workspace` with `Visual Studio Code`. Once inside, you should already see 4 folders, one for each of the compomenents of this project.
+
+To rebuild the project, once/if any modification has been done to any file, head back to your `build` directory and issue `ninja` again, ie:
+```
+cd MetaProject/build
+ninja
+```
+
+Generated binaries will be updated on `MetaProject/install/bin/`.
 
 Using Visual Studio Community Edition (or Pro versions) on Windows is, at the moment, work in project. There is no ETA and probably will be delayed for a long time.
 
